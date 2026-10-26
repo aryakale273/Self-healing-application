@@ -16,7 +16,6 @@ const elements = {
   simulateBtn: document.getElementById("simulateBtn"),
   actionMessage: document.getElementById("actionMessage"),
   eventList: document.getElementById("eventList"),
-  responseTime: document.getElementById("responseTime"),
   checkBtn: document.getElementById("checkBtn"),
 };
 
@@ -24,21 +23,16 @@ let previousStatus = null;
 let requestInProgress = false;
 
 function setText(element, value) {
-  if (element) {
-    element.textContent = value;
-  }
+  if (element) element.textContent = value;
 }
 
 function formatTimestamp(timestamp) {
   if (!timestamp) return "Time unavailable";
 
   const date = new Date(timestamp);
-
-  if (Number.isNaN(date.getTime())) {
-    return timestamp;
-  }
-
-  return date.toLocaleString();
+  return Number.isNaN(date.getTime())
+    ? timestamp
+    : date.toLocaleString();
 }
 
 function showMessage(message, type = "info") {
@@ -52,22 +46,59 @@ function showMessage(message, type = "info") {
 
 function setButtonLoading(button, loading, originalText) {
   if (!button) return;
-
   button.disabled = loading;
   button.textContent = loading ? "Please wait..." : originalText;
 }
 
-function updateStatusUI(data) {
-  const healthy = data.status === "healthy";
-  const statusText = healthy ? "Healthy" : "Unhealthy";
+function updateHealthUI(status, details = {}) {
+  const healthy = status === "healthy";
+  const label = healthy ? "Healthy" : "Unhealthy";
 
-  setText(elements.statusValue, statusText);
+  setText(elements.statusValue, label);
   setText(
     elements.statusDescription,
     healthy
       ? "Application is responding normally."
-      : "Application failure detected. Recovery may be in progress."
+      : "Application is unhealthy. Recovery may be in progress."
   );
+
+  setText(elements.healthPill, label);
+  if (elements.healthPill) {
+    elements.healthPill.dataset.status = status;
+  }
+
+  if (elements.healthRing) {
+    elements.healthRing.dataset.status = status;
+  }
+
+  setText(elements.healthIcon, healthy ? "✓" : "!");
+  setText(elements.healthTitle, `Application ${label}`);
+  setText(
+    elements.healthMessage,
+    healthy
+      ? "The application health check reports healthy."
+      : "The application health check reports unhealthy. Check the recovery events."
+  );
+
+  if (details.response_time_ms !== undefined) {
+    setText(
+      document.getElementById("responseTime"),
+      `${details.response_time_ms} ms`
+    );
+  }
+
+  if (previousStatus !== null && previousStatus !== status) {
+    showMessage(
+      `Application status changed to ${label.toLowerCase()}.`,
+      healthy ? "success" : "error"
+    );
+  }
+
+  previousStatus = status;
+}
+
+function updateStatusUI(data) {
+  updateHealthUI(data.status, data);
 
   setText(elements.containerValue, data.container || "shp-app");
   setText(elements.failureValue, data.failure_count ?? 0);
@@ -75,43 +106,6 @@ function updateStatusUI(data) {
     elements.lastUpdated,
     `Last updated: ${formatTimestamp(data.timestamp)}`
   );
-
-  if (elements.responseTime) {
-    setText(
-      elements.responseTime,
-      `${data.response_time_ms ?? "—"} ms`
-    );
-  }
-
-  if (elements.healthPill) {
-    setText(elements.healthPill, statusText);
-    elements.healthPill.dataset.status = data.status;
-  }
-
-  if (elements.healthRing) {
-    elements.healthRing.dataset.status = data.status;
-  }
-
-  if (elements.healthIcon) {
-    setText(elements.healthIcon, healthy ? "✓" : "!");
-  }
-
-  setText(elements.healthTitle, `Application ${statusText}`);
-  setText(
-    elements.healthMessage,
-    healthy
-      ? "The application health endpoint is reporting healthy."
-      : "A test failure or application issue is active. Check the recovery events."
-  );
-
-  if (previousStatus !== null && previousStatus !== data.status) {
-    showMessage(
-      `Application status changed to ${statusText.toLowerCase()}.`,
-      healthy ? "success" : "error"
-    );
-  }
-
-  previousStatus = data.status;
 }
 
 function eventLabel(type) {
@@ -131,19 +125,18 @@ function eventLabel(type) {
 }
 
 function eventClass(type) {
-  if (
-    type === "RECOVERY_SUCCEEDED" ||
-    type === "CONTROLLER_STARTED"
-  ) {
+  if (["RECOVERY_SUCCEEDED", "CONTROLLER_STARTED"].includes(type)) {
     return "success";
   }
 
   if (
-    type === "FAILURE_INJECTED" ||
-    type === "UNHEALTHY_DETECTED" ||
-    type === "CONTAINER_STOPPED" ||
-    type === "DOCKER_API_ERROR" ||
-    type === "CONTAINER_NOT_FOUND"
+    [
+      "FAILURE_INJECTED",
+      "UNHEALTHY_DETECTED",
+      "CONTAINER_STOPPED",
+      "DOCKER_API_ERROR",
+      "CONTAINER_NOT_FOUND",
+    ].includes(type)
   ) {
     return "error";
   }
@@ -190,127 +183,123 @@ function renderEvents(events) {
   });
 }
 
+async function getJSON(url, options = {}) {
+  const response = await fetch(url, {
+    cache: "no-store",
+    ...options,
+  });
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(data.error || `Request failed (${response.status})`);
+  }
+
+  return data;
+}
+
 async function refreshStatus() {
   if (requestInProgress) return;
-
   requestInProgress = true;
 
   try {
-    const response = await fetch("/api/status", {
-      cache: "no-store",
-    });
-
-    if (!response.ok) {
-      throw new Error(`Status request failed (${response.status})`);
-    }
-
-    const data = await response.json();
+    const data = await getJSON("/api/status");
     updateStatusUI(data);
   } catch (error) {
-    console.error("Could not refresh application status:", error);
+    console.error("Status refresh failed:", error);
     setText(elements.statusValue, "Unavailable");
-    setText(elements.statusDescription, "Unable to retrieve application status.");
-    showMessage("Could not load live status. Check the app container.", "error");
+    setText(elements.healthPill, "UNAVAILABLE");
+    setText(elements.healthTitle, "Health status unavailable");
+    setText(elements.healthMessage, "Could not retrieve application status.");
   } finally {
     requestInProgress = false;
   }
 
   try {
-    const response = await fetch("/api/events", {
-      cache: "no-store",
-    });
-
-    if (!response.ok) {
-      throw new Error(`Events request failed (${response.status})`);
-    }
-
-    const data = await response.json();
+    const data = await getJSON("/api/events");
     renderEvents(data.events || []);
   } catch (error) {
-    console.error("Could not load event history:", error);
-  }
-}
-
-async function simulateFailure() {
-  if (!elements.simulateBtn) return;
-
-  const originalText = "Simulate Failure";
-  setButtonLoading(elements.simulateBtn, true, originalText);
-
-  try {
-    const response = await fetch("/simulate-failure", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-
-    const data = await response.json();
-
-    if (!response.ok) {
-      throw new Error(data.error || "Could not simulate failure.");
-    }
-
-    showMessage(
-      "Test failure injected. Waiting for Docker health checks and recovery...",
-      "success"
-    );
-
-    await refreshStatus();
-  } catch (error) {
-    showMessage(error.message || "Failure simulation failed.", "error");
-  } finally {
-    setButtonLoading(elements.simulateBtn, false, originalText);
+    console.error("Event refresh failed:", error);
   }
 }
 
 async function runHealthCheck() {
-  if (elements.checkBtn) {
-    setButtonLoading(elements.checkBtn, true, "Run Health Check");
-  }
+  setButtonLoading(elements.checkBtn, true, "✓ Run Health Check");
 
   try {
-    const response = await fetch("/api/check", {
-      cache: "no-store",
-    });
+    // This endpoint must return JSON containing the health-check result.
+    const data = await getJSON("/api/check");
 
-    const data = await response.json();
-
-    if (!response.ok) {
-      showMessage(
-        `Health check: ${data.status || "unhealthy"}. Check the recovery timeline.`,
-        "error"
-      );
-    } else {
-      showMessage(
-        `Health check passed in ${data.response_time_ms} ms.`,
-        "success"
-      );
+    if (data.status) {
+      updateHealthUI(data.status, data);
     }
+
+    showMessage(
+      data.status === "healthy"
+        ? `Health check passed${data.response_time_ms !== undefined
+            ? ` in ${data.response_time_ms} ms`
+            : ""}.`
+        : `Health check result: ${data.status || "unknown"}.`,
+      data.status === "healthy" ? "success" : "error"
+    );
 
     await refreshStatus();
   } catch (error) {
-    showMessage("Unable to run the health check.", "error");
+    console.error("Health check failed:", error);
+    showMessage(
+      `Health check failed: ${error.message}. Verify the /api/check endpoint.`,
+      "error"
+    );
   } finally {
-    if (elements.checkBtn) {
-      setButtonLoading(elements.checkBtn, false, "Run Health Check");
-    }
+    setButtonLoading(elements.checkBtn, false, "✓ Run Health Check");
+  }
+}
+
+async function simulateFailure() {
+  setButtonLoading(
+    elements.simulateBtn,
+    true,
+    "⚡ Simulate application failure"
+  );
+
+  try {
+    const data = await getJSON("/simulate-failure", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+    });
+
+    showMessage(
+      data.message || "Failure injected. Waiting for automatic recovery...",
+      "info"
+    );
+
+    // Continue refreshing while the recovery controller responds.
+    await refreshStatus();
+  } catch (error) {
+    console.error("Failure simulation failed:", error);
+    showMessage(
+      `Could not simulate failure: ${error.message}. Check the backend route.`,
+      "error"
+    );
+  } finally {
+    setButtonLoading(
+      elements.simulateBtn,
+      false,
+      "⚡ Simulate application failure"
+    );
   }
 }
 
 if (elements.refreshBtn) {
-  elements.refreshBtn.addEventListener("click", async () => {
-    showMessage("Refreshing monitoring data...", "info");
-    await refreshStatus();
-  });
-}
-
-if (elements.simulateBtn) {
-  elements.simulateBtn.addEventListener("click", simulateFailure);
+  elements.refreshBtn.addEventListener("click", refreshStatus);
 }
 
 if (elements.checkBtn) {
   elements.checkBtn.addEventListener("click", runHealthCheck);
+}
+
+if (elements.simulateBtn) {
+  elements.simulateBtn.addEventListener("click", simulateFailure);
 }
 
 refreshStatus();

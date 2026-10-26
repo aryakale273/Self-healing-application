@@ -12,3 +12,42 @@
 {"timestamp": "2026-10-26T07:42:39.801222+00:00", "type": "UNHEALTHY_DETECTED", "message": "Docker health check reports the application is unhealthy.", "details": {"container": "shp-app"}}
 {"timestamp": "2026-10-26T07:42:39.811784+00:00", "type": "RESTART_INITIATED", "message": "Recovery controller is restarting the application container.", "details": {"container": "shp-app"}}
 {"timestamp": "2026-10-26T07:42:52.639487+00:00", "type": "RECOVERY_SUCCEEDED", "message": "Application container is healthy again after recovery.", "details": {"container": "shp-app"}}
+{"timestamp": "2026-10-26T08:04:42.247393+00:00", "type": "FAILURE_INJECTED", "message": "A test failure was injected into the application.", "details": {"failure_count": 1}}
+{"timestamp": "2026-10-26T08:05:16.135272+00:00", "type": "UNHEALTHY_DETECTED", "message": "Docker health check reports the application is unhealthy.", "details": {"container": "shp-app"}}
+{"timestamp": "2026-10-26T08:05:16.148276+00:00", "type": "RESTART_INITIATED", "message": "Recovery controller is restarting the application container.", "details": {"container": "shp-app"}}
+{"timestamp": "2026-10-26T08:05:27.446805+00:00", "type": "RECOVERY_SUCCEEDED", "message": "Application container is healthy again after recovery.", "details": {"container": "shp-app"}}
+{"timestamp": "2026-10-26T08:06:20.004594+00:00", "type": "FAILURE_INJECTED", "message": "A test failure was injected into the application.", "details": {"failure_count": 1}}
+{"timestamp": "2026-10-26T08:06:53.051335+00:00", "type": "UNHEALTHY_DETECTED", "message": "Docker health check reports the application is unhealthy.", "details": {"container": "shp-app"}}
+{"timestamp": "2026-10-26T08:06:53.061194+00:00", "type": "RESTART_INITIATED", "message": "Recovery controller is restarting the application container.", "details": {"container": "shp-app"}}
+{"timestamp": "2026-10-26T08:07:04.954043+00:00", "type": "RECOVERY_SUCCEEDED", "message": "Application container is healthy again after recovery.", "details": {"container": "shp-app"}}
+{"timestamp": "2026-10-26T08:16:55.113483+00:00", "type": "FAILURE_INJECTED", "message": "A test failure was injected into the application.", "details": {"failure_count": 1}}
+{"timestamp": "2026-10-26T08:17:20.241667+00:00", "type": "UNHEALTHY_DETECTED", "message": "Docker health check reports the application is unhealthy.", "details": {"container": "shp-app"}}
+{"timestamp": "2026-10-26T08:17:20.251414+00:00", "type": "RESTART_INITIATED", "message": "Recovery controller is restarting the application container.", "details": {"container": "shp-app"}}
+{"timestamp": "2026-10-26T08:17:31.244783+00:00", "type": "RECOVERY_SUCCEEDED", "message": "Application container is healthy again after recovery.", "details": {"container": "shp-app"}}
+{"timestamp": "2026-10-26T08:30:16.017656+00:00", "type": "MANUAL_HEALTH_CHECK", "message": "Manual health check: healthy", "details": {"status": "healthy", "response_time_ms": 0.0}}
+{"timestamp": "2026-10-26T08:30:28.242115+00:00", "type": "FAILURE_INJECTED", "message": "A test failure was injected into the application.", "details": {"failure_count": 1}}
+{"timestamp": "2026-10-26T08:31:00.309935+00:00", "type": "UNHEALTHY_DETECTED", "message": "Docker health check reports the application is unhealthy.", "details": {"container": "shp-app"}}
+{"timestamp": "2026-10-26T08:31:00.320637+00:00", "type": "RESTART_INITIATED", "message": "Recovery controller is restarting the application container.", "details": {"container": "shp-app"}}
+{"timestamp": "2026-10-26T08:31:11.759417+00:00", "type": "RECOVERY_SUCCEEDED", "message": "Application container is healthy again after recovery.", "details": {"container": "shp-app"}}
+{"timestamp": "2026-10-26T08:36:01.401571+00:00", "type": "FAILURE_INJECTED", "message": "A test failure was injected into the application.", "details": {"failure_count": 1}}
+{"timestamp": "2026-10-26T08:36:35.018363+00:00", "type": "UNHEALTHY_DETECTED", "message": "Docker health check reports the application is unhealthy.", "details": {"container": "shp-app"}}
+{"timestamp": "2026-10-26T08:36:35.024957+00:00", "type": "RESTART_INITIATED", "message": "Recovery controller is restarting the application container.", "details": {"container": "shp-app"}}
+{"timestamp": "2026-10-26T08:36:46.091538+00:00", "type": "RECOVERY_SUCCEEDED", "message": "Application container is healthy again after recovery.", "details": {"container": "shp-app"}}
+{"timestamp": "2026-10-26T08:41:55.935425+00:00", "type": "MANUAL_HEALTH_CHECK", "message": "Manual health check: healthy", "details": {"status": "healthy", "response_time_ms": 0.0}}
+{"timestamp": "2026-10-26T08:41:58.104263+00:00", "type": "FAILURE_INJECTED", "message": "A test failure was injected into the application.", "details": {"failure_count": 1}}
+{"timestamp": "2026-10-26T08:42:26.475088+00:00", "type": "UNHEALTHY_DETECTED", "message": "Docker health check reports the application is unhealthy.", "details": {"container": "shp-app"}}
+{"timestamp": "2026-10-26T08:42:26.484381+00:00", "type": "RESTART_INITIATED", "message": "Recovery controller is restarting the application container.", "details": {"container": "shp-app"}}
+{"timestamp": "2026-10-26T08:42:38.088530+00:00", "type": "RECOVERY_SUCCEEDED", "message": "Application container is healthy again after recovery.", "details": {"container": "shp-app"}}
+{"timestamp": "2026-10-26T08:44:16.960813+00:00", "type": "MANUAL_HEALTH_CHECK", "message": "Manual health check: healthy", "details": {"status": "healthy", "response_time_ms": 0.0}}
+{"timestamp": "2026-10-26T08:44:18.040811+00:00", "type": "FAILURE_INJECTED", "message": "A test failure was injected into the application.", "details": {"failure_count": 1}}
+{"timestamp": "2026-10-26T08:44:20.312533+00:00", "type": "MANUAL_HEALTH_CHECK", "message": "Manual health check: unhealthy", "details": {"status": "unhealthy", "response_time_ms": 0.0}}
+{"timestamp": "2026-10-26T08:44:49.611168+00:00", "type": "UNHEALTHY_DETECTED", "message": "Docker health check reports the application is unhealthy.", "details": {"container": "shp-app"}}
+{"timestamp": "2026-10-26T08:44:49.623349+00:00", "type": "RESTART_INITIATED", "message": "Recovery controller is restarting the application container.", "details": {"container": "shp-app"}}
+{"timestamp": "2026-10-26T08:45:00.845614+00:00", "type": "RECOVERY_SUCCEEDED", "message": "Application container is healthy again after recovery.", "details": {"container": "shp-app"}}
+{"timestamp": "2026-10-26T09:02:19.320699+00:00", "type": "CONTAINER_STOPPED", "message": "Application container is stopped; attempting to start it.", "details": {"container": "shp-app", "status": "removing"}}
+{"timestamp": "2026-10-26T09:02:19.523014+00:00", "type": "CONTAINER_NOT_FOUND", "message": "Recovery controller could not find the target container.", "details": {"container": "shp-app"}}
+{"timestamp": "2026-10-26T09:02:46.567611+00:00", "type": "MANUAL_HEALTH_CHECK", "message": "Manual health check: healthy", "details": {"status": "healthy", "response_time_ms": 0.0}}
+{"timestamp": "2026-10-26T09:02:48.899683+00:00", "type": "FAILURE_INJECTED", "message": "A test failure was injected into the application.", "details": {"failure_count": 1}}
+{"timestamp": "2026-10-26T09:03:25.320109+00:00", "type": "UNHEALTHY_DETECTED", "message": "Docker health check reports the application is unhealthy.", "details": {"container": "shp-app"}}
+{"timestamp": "2026-10-26T09:03:25.331277+00:00", "type": "RESTART_INITIATED", "message": "Recovery controller is restarting the application container.", "details": {"container": "shp-app"}}
+{"timestamp": "2026-10-26T09:03:36.755298+00:00", "type": "RECOVERY_SUCCEEDED", "message": "Application container is healthy again after recovery.", "details": {"container": "shp-app"}}

@@ -161,3 +161,13 @@ footer span { text-align: right; }
   .panel { padding: 18px; }
   footer { align-items: flex-start; flex-direction: column; }
 }
+
+.recovery-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.recovery-buttons button {
+  width: 100%;
+}
