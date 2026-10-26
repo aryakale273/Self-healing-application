@@ -1,0 +1,136 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Self-Healing Control Center</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <script src="{{ url_for('static', filename='app.js') }}" defer></script>
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-icon">S</div>
+      <div>
+        <strong>Sentinel</strong>
+        <span>SELF-HEALING PLATFORM</span>
+      </div>
+    </div>
+
+    <div class="nav-label">WORKSPACE</div>
+    <a class="nav-item active" href="/">▦ &nbsp; Overview</a>
+    <a class="nav-item" href="#services">◈ &nbsp; Services</a>
+    <a class="nav-item" href="#recovery">↻ &nbsp; Recovery events</a>
+
+    <div class="sidebar-bottom">
+      <div class="online-dot"></div>
+      <div><strong>Local environment</strong><span>Docker Compose</span></div>
+    </div>
+  </aside>
+
+  <main class="main">
+    <header class="topbar">
+      <div>
+        <div class="eyebrow">INFRASTRUCTURE / OVERVIEW</div>
+        <h1>Control Center</h1>
+        <p class="muted">Monitor application health and automated recovery.</p>
+      </div>
+      <div class="top-right">
+        <span class="live-badge"><span class="online-dot"></span> LIVE MONITORING</span>
+        <button id="refreshBtn" class="secondary-btn">↻ Refresh</button>
+      </div>
+    </header>
+
+    <section class="welcome">
+      <div>
+        <div class="eyebrow">SELF-HEALING SYSTEM</div>
+        <h2>Your infrastructure, resilient by design.</h2>
+        <p>Detect failures. Trigger recovery. Restore application health automatically.</p>
+      </div>
+      <div class="welcome-symbol">⌁</div>
+    </section>
+
+    <section class="section-heading">
+      <div><h2>System overview</h2><p>Current application status</p></div>
+      <span id="lastUpdated" class="muted small">Waiting for first check...</span>
+    </section>
+
+    <section class="metrics" id="services">
+      <article class="metric-card">
+        <div class="metric-top"><span>APPLICATION STATUS</span><span class="metric-icon">◉</span></div>
+        <div id="statusValue" class="metric-value">Checking...</div>
+        <div id="statusDescription" class="metric-note">Connecting to application</div>
+      </article>
+      <article class="metric-card">
+        <div class="metric-top"><span>APPLICATION CONTAINER</span><span class="metric-icon">▣</span></div>
+        <div id="containerValue" class="metric-value">shp-app</div>
+        <div class="metric-note">Docker container identifier</div>
+      </article>
+      <article class="metric-card">
+        <div class="metric-top"><span>SIMULATED FAILURES</span><span class="metric-icon">⚡</span></div>
+        <div id="failureValue" class="metric-value">0</div>
+        <div class="metric-note">Recorded by this app process</div>
+      </article>
+      <article class="metric-card">
+        <div class="metric-top"><span>MONITORING</span><span class="metric-icon">⌁</span></div>
+        <div class="metric-value">5 sec</div>
+        <div class="metric-note">Recovery controller polling interval</div>
+      </article>
+    </section>
+
+    <section class="content-grid">
+      <article class="panel">
+        <div class="panel-heading">
+          <div><h2>Application health</h2><p>Live result from the health API</p></div>
+          <span id="healthPill" class="pill">CHECKING</span>
+        </div>
+
+        <div class="health-display">
+          <div id="healthRing" class="health-ring"><span id="healthIcon">↻</span></div>
+          <div>
+            <h3 id="healthTitle">Checking system...</h3>
+            <p id="healthMessage" class="muted">Contacting the application health endpoint.</p>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+        <div class="detail-row"><span>Application endpoint</span><code>/health</code></div>
+        <div class="detail-row"><span>Status API</span><code>/api/status</code></div>
+        <div class="detail-row"><span>External access port</span><code>8080</code></div>
+      </article>
+
+      <article class="panel" id="recovery">
+        <div class="panel-heading">
+          <div><h2>Recovery controls</h2><p>Test the self-healing workflow</p></div>
+          <span class="metric-icon">⚙</span>
+        </div>
+
+        <div class="warning-box">
+          <strong>Controlled failure simulation</strong>
+          <p>This deliberately makes the application health check fail. The recovery controller should detect it and restart the container.</p>
+        </div>
+
+        <button id="simulateBtn" class="danger-btn">⚡ Simulate application failure</button>
+        <p id="actionMessage" class="muted action-message">Use this button to test automated recovery.</p>
+
+        <div class="divider"></div>
+        <div class="detail-row"><span>Recovery controller</span><span class="text-green">● Configured</span></div>
+        <div class="detail-row"><span>Recovery interval</span><strong>5 seconds</strong></div>
+      </article>
+    </section>
+
+    <section class="panel activity-panel">
+      <div class="panel-heading">
+        <div><h2>Activity & system events</h2><p>Events observed by this dashboard</p></div>
+        <span class="live-badge">AUTO-REFRESH</span>
+      </div>
+      <div id="eventList" class="event-list">
+        <div class="empty-event">Waiting for application events...</div>
+      </div>
+    </section>
+
+    <footer>Sentinel Self-Healing Platform <span>Built with Flask · Docker · Python</span></footer>
+  </main>
+</body>
+</html>

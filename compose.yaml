@@ -1,0 +1,72 @@
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: shp-app
+    ports:
+      - "8080:5000"
+    environment:
+      ENABLE_FAILURE_SIMULATION: "true"
+      EVENT_FILE: "/data/events.jsonl"
+    volumes:
+      - ./data:/data
+    restart: unless-stopped
+    healthcheck:
+      test:
+        - CMD
+        - python
+        - -c
+        - "import urllib.request; urllib.request.urlopen('http://127.0.0.1:5000/health', timeout=3)"
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 15s
+
+  recovery-controller:
+    build:
+      context: ./recovery
+      dockerfile: Dockerfile
+    container_name: shp-recovery
+    environment:
+      EVENT_FILE: "/data/events.jsonl"
+    restart: unless-stopped
+    depends_on:
+      - app
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./data:/data
+
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: shp-prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus_data:/prometheus
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+      - "--storage.tsdb.path=/prometheus"
+    restart: unless-stopped
+    depends_on:
+      - app
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: shp-grafana
+    ports:
+      - "3000:3000"
+    environment:
+      GF_SECURITY_ADMIN_USER: admin
+      GF_SECURITY_ADMIN_PASSWORD: ChangeThisPassword123!
+    volumes:
+      - grafana_data:/var/lib/grafana
+    restart: unless-stopped
+    depends_on:
+      - prometheus
+
+volumes:
+  prometheus_data:
+  grafana_data:

@@ -1,0 +1,14 @@
+{"timestamp": "2026-10-26T06:38:51.179202+00:00", "type": "CONTROLLER_STARTED", "message": "Self-healing recovery controller started.", "details": {"container": "shp-app"}}
+{"timestamp": "2026-10-26T06:39:50.398052+00:00", "type": "MANUAL_HEALTH_CHECK", "message": "Manual health check: unhealthy", "details": {"status": "unhealthy", "response_time_ms": 3005.25}}
+{"timestamp": "2026-10-26T06:44:10.514009+00:00", "type": "MANUAL_HEALTH_CHECK", "message": "Manual health check: healthy", "details": {"status": "healthy", "response_time_ms": 0.0}}
+{"timestamp": "2026-10-26T06:45:43.100809+00:00", "type": "FAILURE_INJECTED", "message": "A test failure was injected into the application.", "details": {"failure_count": 1}}
+{"timestamp": "2026-10-26T06:46:16.951145+00:00", "type": "UNHEALTHY_DETECTED", "message": "Docker health check reports the application is unhealthy.", "details": {"container": "shp-app"}}
+{"timestamp": "2026-10-26T06:46:16.959037+00:00", "type": "RESTART_INITIATED", "message": "Recovery controller is restarting the application container.", "details": {"container": "shp-app"}}
+{"timestamp": "2026-10-26T06:46:28.733714+00:00", "type": "RECOVERY_SUCCEEDED", "message": "Application container is healthy again after recovery.", "details": {"container": "shp-app"}}
+{"timestamp": "2026-10-26T06:49:40.859321+00:00", "type": "UNHEALTHY_DETECTED", "message": "Docker health check reports the application is unhealthy.", "details": {"container": "shp-app"}}
+{"timestamp": "2026-10-26T06:49:40.869375+00:00", "type": "RESTART_INITIATED", "message": "Recovery controller is restarting the application container.", "details": {"container": "shp-app"}}
+{"timestamp": "2026-10-26T06:49:52.258532+00:00", "type": "RECOVERY_SUCCEEDED", "message": "Application container is healthy again after recovery.", "details": {"container": "shp-app"}}
+{"timestamp": "2026-10-26T07:42:14.432121+00:00", "type": "FAILURE_INJECTED", "message": "A test failure was injected into the application.", "details": {"failure_count": 1}}
+{"timestamp": "2026-10-26T07:42:39.801222+00:00", "type": "UNHEALTHY_DETECTED", "message": "Docker health check reports the application is unhealthy.", "details": {"container": "shp-app"}}
+{"timestamp": "2026-10-26T07:42:39.811784+00:00", "type": "RESTART_INITIATED", "message": "Recovery controller is restarting the application container.", "details": {"container": "shp-app"}}
+{"timestamp": "2026-10-26T07:42:52.639487+00:00", "type": "RECOVERY_SUCCEEDED", "message": "Application container is healthy again after recovery.", "details": {"container": "shp-app"}}
